@@ -10,6 +10,8 @@ from telegram.ext import (
 )
 
 ENTER_AMOUNT = 1
+REPORT_FROM  = 2
+REPORT_TO    = 3
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -74,7 +76,24 @@ I18N = {
         "goal_label":   "hedef",
         "extra_label":  "ekstra",
         "days": {0:"Pazartesi",1:"Salı",2:"Çarşamba",3:"Perşembe",4:"Cuma",5:"Cumartesi",6:"Pazar"},
-        "day_options":  "pazartesi · salı · çarşamba · perşembe · cuma · cumartesi · pazar",
+        "day_options":       "pazartesi · salı · çarşamba · perşembe · cuma · cumartesi · pazar",
+        "group_usage":       "Kullanım: `/newgroup <grup adı>`",
+        "group_created":     "✅ *{name}* grubu oluşturuldu!\n\nDavet linki:\n`{link}`\n\nBu linki paylaş — katılanlar raporunda görünür.",
+        "group_exists":      "Zaten bir grubun var. Görmek için /mygroup yaz.",
+        "group_not_found":   "Grup bulunamadı.",
+        "group_joined":      "✅ *{name}* grubuna katıldın! İlerlemen grup sahibiyle paylaşılacak.",
+        "group_already":     "Zaten bu grubun üyesisin.",
+        "group_info":        "👥 *{name}*\n👑 Sen sahipsin\n👤 Üye sayısı: {count}\n\nDavet linki:\n`{link}`",
+        "group_left":        "Gruptan ayrıldın.",
+        "group_not_member":  "Herhangi bir grubun üyesi değilsin.",
+        "not_owner":         "Grubun yok. `/newgroup <isim>` ile oluştur.",
+        "report_ask_from":   "📅 Rapor başlangıç tarihi? (örn: 04/01)",
+        "report_ask_to":     "📅 Bitiş tarihi? (örn: 04/23)",
+        "report_date_invalid":"Geçersiz tarih. Tekrar dene (örn: 04/01):",
+        "report_range_invalid":"Başlangıç tarihi bitiş tarihinden önce olmalı.",
+        "report_title":      "📊 *{name} — Grup Raporu*\n📅 {from_date} – {to_date}\n",
+        "report_no_members": "Grupta henüz üye yok.",
+        "report_cancel":     "İptal edildi.",
         "intros": [
             "Bismillah! Küçük adımlar büyük yolculuklar başlatır. 💪",
             "Hayırlı günler! Bugünkü hedeflerin seni bekliyor. ✨",
@@ -117,7 +136,24 @@ I18N = {
         "goal_label":   "goal",
         "extra_label":  "extra",
         "days": {0:"Monday",1:"Tuesday",2:"Wednesday",3:"Thursday",4:"Friday",5:"Saturday",6:"Sunday"},
-        "day_options":  "monday · tuesday · wednesday · thursday · friday · saturday · sunday",
+        "day_options":       "monday · tuesday · wednesday · thursday · friday · saturday · sunday",
+        "group_usage":       "Usage: `/newgroup <group name>`",
+        "group_created":     "✅ Group *{name}* created!\n\nInvite link:\n`{link}`\n\nShare this link — whoever joins will appear in your report.",
+        "group_exists":      "You already have a group. Use /mygroup to see it.",
+        "group_not_found":   "Group not found.",
+        "group_joined":      "✅ You joined *{name}*! Your progress will be shared with the group owner.",
+        "group_already":     "You're already a member of this group.",
+        "group_info":        "👥 *{name}*\n👑 You are the owner\n👤 Members: {count}\n\nInvite link:\n`{link}`",
+        "group_left":        "You left the group.",
+        "group_not_member":  "You're not a member of any group.",
+        "not_owner":         "You don't have a group. Create one with `/newgroup <name>`.",
+        "report_ask_from":   "📅 Report start date? (e.g. 04/01)",
+        "report_ask_to":     "📅 End date? (e.g. 04/23)",
+        "report_date_invalid":"Invalid date. Try again (e.g. 04/01):",
+        "report_range_invalid":"Start date must be before end date.",
+        "report_title":      "📊 *{name} — Group Report*\n📅 {from_date} – {to_date}\n",
+        "report_no_members": "No members in this group yet.",
+        "report_cancel":     "Cancelled.",
         "intros": [
             "Bismillah! Small steps lead to great journeys. 💪",
             "Good day! Today's goals are waiting for you. ✨",
@@ -160,7 +196,24 @@ I18N = {
         "goal_label":   "максат",
         "extra_label":  "кошумча",
         "days": {0:"Дүйшөмбү",1:"Шейшемби",2:"Шаршемби",3:"Бейшемби",4:"Жума",5:"Ишемби",6:"Жекшемби"},
-        "day_options":  "дүйшөмбү · шейшемби · шаршемби · бейшемби · жума · ишемби · жекшемби",
+        "day_options":       "дүйшөмбү · шейшемби · шаршемби · бейшемби · жума · ишемби · жекшемби",
+        "group_usage":       "Колдонуу: `/newgroup <топтун аты>`",
+        "group_created":     "✅ *{name}* тобу түзүлдү!\n\nЧакыруу шилтемеси:\n`{link}`\n\nБу шилтемени бөлүш — кимдир кошулса сенде көрүнөт.",
+        "group_exists":      "Сенде мурунтан топ бар. /mygroup жаз.",
+        "group_not_found":   "Топ табылган жок.",
+        "group_joined":      "✅ *{name}* тобуна кошулдуң! Жетишкендигиң топ ээси менен бөлүшүлөт.",
+        "group_already":     "Сен мурунтан бул топтун мүчөсүсүң.",
+        "group_info":        "👥 *{name}*\n👑 Сен ээсисиң\n👤 Мүчөлөр: {count}\n\nЧакыруу шилтемеси:\n`{link}`",
+        "group_left":        "Топтон чыктың.",
+        "group_not_member":  "Сен эч кандай топтун мүчөсү эмессиң.",
+        "not_owner":         "Сенде топ жок. `/newgroup <аты>` менен түз.",
+        "report_ask_from":   "📅 Отчет башталган күнү? (мис: 04/01)",
+        "report_ask_to":     "📅 Аяктаган күнү? (мис: 04/23)",
+        "report_date_invalid":"Туура эмес күн. Кайра аракет кыл (мис: 04/01):",
+        "report_range_invalid":"Башталган күн аяктаган күндөн мурун болушу керек.",
+        "report_title":      "📊 *{name} — Топ Отчету*\n📅 {from_date} – {to_date}\n",
+        "report_no_members": "Топто азырынча мүчө жок.",
+        "report_cancel":     "Жокко чыгарылды.",
         "intros": [
             "Бисмилла! Кичинекей кадамдар чоң жолду башталат. 💪",
             "Кайрымдуу күн! Бүгүнкү максаттарың сени күтүп жатат. ✨",
@@ -203,7 +256,24 @@ I18N = {
         "goal_label":   "цель",
         "extra_label":  "доп.",
         "days": {0:"Понедельник",1:"Вторник",2:"Среда",3:"Четверг",4:"Пятница",5:"Суббота",6:"Воскресенье"},
-        "day_options":  "понедельник · вторник · среда · четверг · пятница · суббота · воскресенье",
+        "day_options":       "понедельник · вторник · среда · четверг · пятница · суббота · воскресенье",
+        "group_usage":       "Использование: `/newgroup <название группы>`",
+        "group_created":     "✅ Группа *{name}* создана!\n\nСсылка для приглашения:\n`{link}`\n\nПоделись ссылкой — все вступившие будут видны в отчёте.",
+        "group_exists":      "У тебя уже есть группа. Используй /mygroup.",
+        "group_not_found":   "Группа не найдена.",
+        "group_joined":      "✅ Ты вступил в *{name}*! Твои результаты будут видны владельцу.",
+        "group_already":     "Ты уже являешься участником этой группы.",
+        "group_info":        "👥 *{name}*\n👑 Ты владелец\n👤 Участников: {count}\n\nСсылка для приглашения:\n`{link}`",
+        "group_left":        "Ты покинул группу.",
+        "group_not_member":  "Ты не являешься участником ни одной группы.",
+        "not_owner":         "У тебя нет группы. Создай с `/newgroup <название>`.",
+        "report_ask_from":   "📅 Дата начала отчёта? (напр: 04/01)",
+        "report_ask_to":     "📅 Дата окончания? (напр: 04/23)",
+        "report_date_invalid":"Неверная дата. Попробуй снова (напр: 04/01):",
+        "report_range_invalid":"Дата начала должна быть раньше даты окончания.",
+        "report_title":      "📊 *{name} — Групповой отчёт*\n📅 {from_date} – {to_date}\n",
+        "report_no_members": "В группе пока нет участников.",
+        "report_cancel":     "Отменено.",
         "intros": [
             "Бисмилла! Маленькие шаги ведут к великим путешествиям. 💪",
             "Доброго дня! Сегодняшние цели ждут тебя. ✨",
@@ -259,6 +329,22 @@ def init_db():
                 task_key TEXT,
                 quantity INTEGER DEFAULT 0,
                 PRIMARY KEY (user_id, date, task_key)
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS groups (
+                group_id   TEXT PRIMARY KEY,
+                owner_id   INTEGER NOT NULL,
+                name       TEXT NOT NULL,
+                created_at TEXT DEFAULT (date('now'))
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS group_members (
+                group_id  TEXT,
+                user_id   INTEGER,
+                joined_at TEXT DEFAULT (date('now')),
+                PRIMARY KEY (group_id, user_id)
             )
         """)
         for col, dflt in [("lang", "'tr'"), ("quantity", "0")]:
@@ -350,6 +436,70 @@ def user_lang(user_id) -> str:
     user = get_user(user_id)
     return user["lang"] if user else "tr"
 
+# ── Group DB ──────────────────────────────────────────────────────────────────
+
+import random, string
+
+def _new_group_id() -> str:
+    return "".join(random.choices(string.ascii_uppercase + string.digits, k=7))
+
+def create_group(owner_id, name) -> str:
+    gid = _new_group_id()
+    with db() as c:
+        c.execute("INSERT INTO groups (group_id, owner_id, name) VALUES (?, ?, ?)", (gid, owner_id, name))
+    return gid
+
+def get_owner_group(owner_id):
+    with db() as c:
+        return c.execute("SELECT * FROM groups WHERE owner_id = ?", (owner_id,)).fetchone()
+
+def get_group(group_id):
+    with db() as c:
+        return c.execute("SELECT * FROM groups WHERE group_id = ?", (group_id,)).fetchone()
+
+def get_members(group_id) -> list:
+    with db() as c:
+        return c.execute(
+            "SELECT u.* FROM users u JOIN group_members gm ON u.user_id = gm.user_id WHERE gm.group_id = ?",
+            (group_id,),
+        ).fetchall()
+
+def member_count(group_id) -> int:
+    with db() as c:
+        return c.execute("SELECT COUNT(*) FROM group_members WHERE group_id = ?", (group_id,)).fetchone()[0]
+
+def add_member(group_id, user_id):
+    with db() as c:
+        c.execute("INSERT OR IGNORE INTO group_members (group_id, user_id) VALUES (?, ?)", (group_id, user_id))
+
+def is_member(group_id, user_id) -> bool:
+    with db() as c:
+        return c.execute(
+            "SELECT 1 FROM group_members WHERE group_id = ? AND user_id = ?", (group_id, user_id)
+        ).fetchone() is not None
+
+def remove_member(group_id, user_id):
+    with db() as c:
+        c.execute("DELETE FROM group_members WHERE group_id = ? AND user_id = ?", (group_id, user_id))
+
+def user_groups(user_id) -> list:
+    with db() as c:
+        return c.execute(
+            "SELECT g.* FROM groups g JOIN group_members gm ON g.group_id = gm.group_id WHERE gm.user_id = ?",
+            (user_id,),
+        ).fetchall()
+
+def parse_date(text: str):
+    for fmt in ("%m/%d", "%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y"):
+        try:
+            d = datetime.strptime(text.strip(), fmt)
+            if fmt == "%m/%d":
+                d = d.replace(year=date.today().year)
+            return d.date()
+        except ValueError:
+            continue
+    return None
+
 
 # ── Message builders ──────────────────────────────────────────────────────────
 
@@ -434,6 +584,24 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
     upsert_user(u.id, u.username, u.first_name)
     lang = user_lang(u.id)
+
+    # Handle invite deep link: /start join_GROUPID
+    if context.args and context.args[0].startswith("join_"):
+        group_id = context.args[0][5:]
+        group = get_group(group_id)
+        if not group:
+            await update.message.reply_text(t(lang, "group_not_found"))
+            return
+        if group["owner_id"] == u.id:
+            await update.message.reply_text("👑 Bu grubun sahibisin.")
+            return
+        if is_member(group_id, u.id):
+            await update.message.reply_text(t(lang, "group_already"))
+            return
+        add_member(group_id, u.id)
+        await update.message.reply_text(t(lang, "group_joined", name=group["name"]), parse_mode="Markdown")
+        return
+
     today = datetime.now(TZ).date().isoformat()
     text = build_text(u.id, today, intro_idx=datetime.now(TZ).weekday())
     await update.message.reply_text(
@@ -550,6 +718,134 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if all_done_today(uid, date_str):
         text += t(lang, "all_done")
     await query.edit_message_text(text, parse_mode="Markdown", reply_markup=keyboard)
+
+
+# ── Group commands ────────────────────────────────────────────────────────────
+
+async def cmd_newgroup(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    lang = user_lang(uid)
+    if not context.args:
+        await update.message.reply_text(t(lang, "group_usage"), parse_mode="Markdown")
+        return
+    if get_owner_group(uid):
+        await update.message.reply_text(t(lang, "group_exists"))
+        return
+    name = " ".join(context.args)
+    group_id = create_group(uid, name)
+    me = await context.bot.get_me()
+    link = f"https://t.me/{me.username}?start=join_{group_id}"
+    await update.message.reply_text(t(lang, "group_created", name=name, link=link), parse_mode="Markdown")
+
+async def cmd_mygroup(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    lang = user_lang(uid)
+    group = get_owner_group(uid)
+    if not group:
+        await update.message.reply_text(t(lang, "not_owner"), parse_mode="Markdown")
+        return
+    me = await context.bot.get_me()
+    link = f"https://t.me/{me.username}?start=join_{group['group_id']}"
+    count = member_count(group["group_id"])
+    await update.message.reply_text(
+        t(lang, "group_info", name=group["name"], count=count, link=link),
+        parse_mode="Markdown",
+    )
+
+async def cmd_leavegroup(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    lang = user_lang(uid)
+    memberships = user_groups(uid)
+    if not memberships:
+        await update.message.reply_text(t(lang, "group_not_member"))
+        return
+    for g in memberships:
+        remove_member(g["group_id"], uid)
+    await update.message.reply_text(t(lang, "group_left"))
+
+# ── Report conversation ───────────────────────────────────────────────────────
+
+async def cmd_report(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    lang = user_lang(uid)
+    group = get_owner_group(uid)
+    if not group:
+        await update.message.reply_text(t(lang, "not_owner"), parse_mode="Markdown")
+        return ConversationHandler.END
+    context.user_data["report_group"] = group["group_id"]
+    await update.message.reply_text(t(lang, "report_ask_from"))
+    return REPORT_FROM
+
+async def report_get_from(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    lang = user_lang(uid)
+    d = parse_date(update.message.text)
+    if not d:
+        await update.message.reply_text(t(lang, "report_date_invalid"))
+        return REPORT_FROM
+    context.user_data["report_from"] = d
+    await update.message.reply_text(t(lang, "report_ask_to"))
+    return REPORT_TO
+
+async def report_get_to(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    lang = user_lang(uid)
+    d = parse_date(update.message.text)
+    if not d:
+        await update.message.reply_text(t(lang, "report_date_invalid"))
+        return REPORT_TO
+    from_date = context.user_data.get("report_from")
+    if d < from_date:
+        await update.message.reply_text(t(lang, "report_range_invalid"))
+        return REPORT_TO
+    group_id = context.user_data.pop("report_group", None)
+    context.user_data.pop("report_from", None)
+    group = get_group(group_id)
+    members = get_members(group_id)
+    if not members:
+        await update.message.reply_text(t(lang, "report_no_members"))
+        return ConversationHandler.END
+
+    lines = [t(lang, "report_title",
+               name=group["name"],
+               from_date=from_date.strftime("%m/%d"),
+               to_date=d.strftime("%m/%d"))]
+
+    days = (d - from_date).days + 1
+    for member in members:
+        mid = member["user_id"]
+        name = member["first_name"] or member["username"] or str(mid)
+        total_done = 0
+        total_possible = days * len(TASKS)
+        day_icons = []
+        cur = from_date
+        while cur <= d:
+            qtys = get_quantities(mid, cur.isoformat())
+            done = sum(1 for key, goal, _, _ in TASKS if qtys.get(key, 0) >= goal)
+            partial = sum(1 for key, goal, _, _ in TASKS if 0 < qtys.get(key, 0) < goal)
+            total_done += done
+            if done == len(TASKS):
+                day_icons.append("✅")
+            elif done > 0 or partial > 0:
+                day_icons.append("🔶")
+            else:
+                day_icons.append("⬜")
+            cur += timedelta(days=1)
+
+        pct = round(total_done / total_possible * 100)
+        bar = "".join(day_icons)
+        lines.append(f"\n👤 *{name}* — {total_done}/{total_possible} ({pct}%)")
+        lines.append(bar)
+
+    await update.message.reply_text("\n".join(lines), parse_mode="Markdown")
+    return ConversationHandler.END
+
+async def report_cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    lang = user_lang(update.effective_user.id)
+    context.user_data.pop("report_group", None)
+    context.user_data.pop("report_from", None)
+    await update.message.reply_text(t(lang, "report_cancel"))
+    return ConversationHandler.END
 
 
 # ── Custom-amount conversation ────────────────────────────────────────────────
@@ -692,18 +988,31 @@ def main():
     init_db()
     app = Application.builder().token(BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start",    cmd_start))
-    app.add_handler(CommandHandler("stop",     cmd_stop))
-    app.add_handler(CommandHandler("lang",     cmd_lang))
-    app.add_handler(CommandHandler("english",  lambda u, c: _set_lang(u, c, "en")))
-    app.add_handler(CommandHandler("turkish",  lambda u, c: _set_lang(u, c, "tr")))
-    app.add_handler(CommandHandler("kyrgyz",   lambda u, c: _set_lang(u, c, "ky")))
-    app.add_handler(CommandHandler("russian",  lambda u, c: _set_lang(u, c, "ru")))
-    app.add_handler(CommandHandler("time",     cmd_time))
-    app.add_handler(CommandHandler("week",     cmd_week))
-    app.add_handler(CommandHandler("stats",    cmd_stats))
+    app.add_handler(CommandHandler("start",      cmd_start))
+    app.add_handler(CommandHandler("stop",       cmd_stop))
+    app.add_handler(CommandHandler("lang",       cmd_lang))
+    app.add_handler(CommandHandler("english",    lambda u, c: _set_lang(u, c, "en")))
+    app.add_handler(CommandHandler("turkish",    lambda u, c: _set_lang(u, c, "tr")))
+    app.add_handler(CommandHandler("kyrgyz",     lambda u, c: _set_lang(u, c, "ky")))
+    app.add_handler(CommandHandler("russian",    lambda u, c: _set_lang(u, c, "ru")))
+    app.add_handler(CommandHandler("time",       cmd_time))
+    app.add_handler(CommandHandler("week",       cmd_week))
+    app.add_handler(CommandHandler("stats",      cmd_stats))
+    app.add_handler(CommandHandler("newgroup",   cmd_newgroup))
+    app.add_handler(CommandHandler("mygroup",    cmd_mygroup))
+    app.add_handler(CommandHandler("leavegroup", cmd_leavegroup))
 
-    # ConversationHandler must be added before the general CallbackQueryHandler
+    # Report conversation (date range input)
+    app.add_handler(ConversationHandler(
+        entry_points=[CommandHandler("report", cmd_report)],
+        states={
+            REPORT_FROM: [MessageHandler(filters.TEXT & ~filters.COMMAND, report_get_from)],
+            REPORT_TO:   [MessageHandler(filters.TEXT & ~filters.COMMAND, report_get_to)],
+        },
+        fallbacks=[CommandHandler("cancel", report_cancel)],
+    ))
+
+    # Custom-amount conversation (must be before general CallbackQueryHandler)
     app.add_handler(ConversationHandler(
         entry_points=[CallbackQueryHandler(btn_enter_amount, pattern="^enter:")],
         states={ENTER_AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, receive_amount)]},
