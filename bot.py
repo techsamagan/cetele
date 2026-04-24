@@ -390,10 +390,20 @@ def build_keyboard(user_id, date_str):
         name = names.get(lang, names["tr"])
         unit = units.get(lang, units["tr"])
         if not is_done(qty, goal):
+            # Top row: mark fully done
             buttons.append([InlineKeyboardButton(
                 f"✅ {task_label(task, lang)}",
                 callback_data=f"done:{date_str}:{key}",
             )])
+            # Second row: log partial — +1 and ✏️ (always available, even before minimum)
+            partial_row = [InlineKeyboardButton(
+                f"➕ +1 {name}",
+                callback_data=f"more1:{date_str}:{key}",
+            ), InlineKeyboardButton(
+                "✏️",
+                callback_data=f"enter:{date_str}:{key}",
+            )]
+            buttons.append(partial_row)
         else:
             # +1 always; +goal when goal > 1; ✏️ to type a custom amount
             row = [InlineKeyboardButton(
